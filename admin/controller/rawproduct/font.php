@@ -21,7 +21,6 @@ class ControllerRawproductFont extends Controller {
 		
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 	
-			
 			$this->model_rawproduct_font->addFont($this->request->post,$_FILES);
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -87,8 +86,6 @@ class ControllerRawproductFont extends Controller {
 		
 		$this->getList();
 	}
-	
-	
 	
 	protected function getList() {
 		if (isset($this->request->get['page'])) {

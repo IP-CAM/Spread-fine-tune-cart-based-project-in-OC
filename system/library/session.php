@@ -1,5 +1,5 @@
 <?php
-class Session {
+final class Session {
 	public $data = array();
 			
   	public function __construct() {		
@@ -10,12 +10,8 @@ class Session {
 			session_set_cookie_params(0, '/');
 			session_start();
 		}
-			
-		$this->data =& $_SESSION;
-	}
 	
-	function getId() {
-		return session_id();
+		$this->data =& $_SESSION;
 	}
 }
 ?>

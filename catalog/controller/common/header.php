@@ -49,12 +49,10 @@ class ControllerCommonHeader extends Controller {
 		$this->data['account'] = $this->url->link('account/account', '', 'SSL');
 		$this->data['shopping_cart'] = $this->url->link('checkout/cart');
 		$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
-		//===========JS TOOL STARTS====================================
 		$this->data['text_design_your_own'] = $this->language->get('text_design_your_own');
 		$this->data['design_your_own'] = $this->url->link('designer/product');
 		$this->data['design_from_raw_product'] = $this->language->get('design_from_raw_product');
 		$this->data['raw_product_design'] = $this->url->link('rawproduct/category&path=20');
-		//===========JS TOOL ENDS====================================
 		// Daniel's robot detector
 		$status = true;
 		

@@ -1,24 +1,24 @@
 <?php
 // HTTP
-define('HTTP_SERVER', 'http://inkfi.com/demo/spreadshirt-advance/admin/');
-define('HTTP_CATALOG', 'http://inkfi.com/demo/spreadshirt-advance/');
+define('HTTP_SERVER', 'http://inkfi.com/demo/spreadshirt/admin/');
+define('HTTP_CATALOG', 'http://inkfi.com/demo/spreadshirt/');
 
 // HTTPS
-define('HTTPS_SERVER', 'http://inkfi.com/demo/spreadshirt-advance/admin/');
-define('HTTPS_CATALOG', 'http://inkfi.com/demo/spreadshirt-advance/');
+define('HTTPS_SERVER', 'http://inkfi.com/demo/spreadshirt/admin/');
+define('HTTPS_CATALOG', 'http://inkfi.com/demo/spreadshirt/');
 
 // DIR
-define('DIR_APPLICATION', '/home/inkficom/public_html/demo/spreadshirt-advance/admin/');
-define('DIR_SYSTEM', '/home/inkficom/public_html/demo/spreadshirt-advance/system/');
-define('DIR_DATABASE', '/home/inkficom/public_html/demo/spreadshirt-advance/system/database/');
-define('DIR_LANGUAGE', '/home/inkficom/public_html/demo/spreadshirt-advance/admin/language/');
-define('DIR_TEMPLATE', '/home/inkficom/public_html/demo/spreadshirt-advance/admin/view/template/');
-define('DIR_CONFIG', '/home/inkficom/public_html/demo/spreadshirt-advance/system/config/');
-define('DIR_IMAGE', '/home/inkficom/public_html/demo/spreadshirt-advance/image/');
-define('DIR_CACHE', '/home/inkficom/public_html/demo/spreadshirt-advance/system/cache/');
-define('DIR_DOWNLOAD', '/home/inkficom/public_html/demo/spreadshirt-advance/download/');
-define('DIR_LOGS', '/home/inkficom/public_html/demo/spreadshirt-advance/system/logs/');
-define('DIR_CATALOG', '/home/inkficom/public_html/demo/spreadshirt-advance/catalog/');
+define('DIR_APPLICATION', '/home/inkficom/public_html/demo/spreadshirt/admin/');
+define('DIR_SYSTEM', '/home/inkficom/public_html/demo/spreadshirt/system/');
+define('DIR_DATABASE', '/home/inkficom/public_html/demo/spreadshirt/system/database/');
+define('DIR_LANGUAGE', '/home/inkficom/public_html/demo/spreadshirt/admin/language/');
+define('DIR_TEMPLATE', '/home/inkficom/public_html/demo/spreadshirt/admin/view/template/');
+define('DIR_CONFIG', '/home/inkficom/public_html/demo/spreadshirt/system/config/');
+define('DIR_IMAGE', '/home/inkficom/public_html/demo/spreadshirt/image/');
+define('DIR_CACHE', '/home/inkficom/public_html/demo/spreadshirt/system/cache/');
+define('DIR_DOWNLOAD', '/home/inkficom/public_html/demo/spreadshirt/download/');
+define('DIR_LOGS', '/home/inkficom/public_html/demo/spreadshirt/system/logs/');
+define('DIR_CATALOG', '/home/inkficom/public_html/demo/spreadshirt/catalog/');
 
 // DB
 define('DB_DRIVER', 'mysql');
@@ -28,7 +28,7 @@ define('DB_PASSWORD', 'demo123');
 define('DB_DATABASE', 'inkficom_jstool');
 define('DB_PREFIX', 'oc_');
 /////////////////// ODT //////////////////////
-define('DIR_WEBROOT', '/home/inkficom/public_html/demo/spreadshirt-advance/webroot/');
+define('DIR_WEBROOT', '/home/inkficom/public_html/demo/spreadshirt/webroot/');
 define('HTTP_WEBROOT', HTTP_CATALOG.'webroot/');
 define('HTTP_IMAGE', HTTP_CATALOG.'image/');//HTTP_SERVER.
 define('IMAGEMAGICPATH', "/usr/local/bin/convert");

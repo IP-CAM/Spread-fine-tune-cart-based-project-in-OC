@@ -1,5 +1,5 @@
 <?php
-class Weight {
+final class Weight {
 	private $weights = array();
 	
 	public function __construct($registry) {
@@ -23,19 +23,14 @@ class Weight {
       		return $value;
 		}
 		
-		if (isset($this->weights[$from])) {
+		if (!isset($this->weights[$from]) || !isset($this->weights[$to])) {
+			return $value;
+		} else {			
 			$from = $this->weights[$from]['value'];
-		} else {
-			$from = 0;
-		}
-		
-		if (isset($this->weights[$to])) {
 			$to = $this->weights[$to]['value'];
-		} else {
-			$to = 0;
-		}	
 		
-		return $value * ($to / $from);
+			return $value * ($to / $from);
+		}
   	}
 
 	public function format($value, $weight_class_id, $decimal_point = '.', $thousand_point = ',') {

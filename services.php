@@ -2,8 +2,9 @@
 session_start();
 error_reporting(E_ERROR);
 //error_reporting(0);
-if (file_exists('config.php')) {
-	require_once ('config.php');
+
+if (file_exists('we_config.php')) {
+	require_once ('we_config.php');
 }
 if (file_exists('we_imscripts/we_generateEffects.php')) {
 	require_once ('we_imscripts/we_generateEffects.php');
@@ -17,7 +18,7 @@ mysql_query('SET NAMES utf8');
 
 // connect code end ----------------------
 // table consant start--------------------
-define('PREFIX', 'oc_');
+define('PREFIX', DB_PREFIX);
 define('LANG_ID', 1);
 define('TBL_CATEGORY', PREFIX . 'category');
 define('TBL_CURRENCY', PREFIX . 'currency');
@@ -93,16 +94,7 @@ define('LANGUAGECODE', $_SESSION['language']);
 
 // SESSION CONSTANT END-------------------
 function secure($data) {
-	$host = str_replace("www.", "", $_SERVER['HTTP_HOST']);
-	$filename = _CLIPART_ORIGINAL_ . TOOLSECURE;
-	if (file_exists($filename)) {
-		echo '';
-		die ;
-	}
-	if (HOSTSECURE != $host) {
-		echo '';
-		die ;
-	}
+	return;
 }
 
 function getCommonFields($post) {
@@ -138,6 +130,7 @@ function getproducts($cat_id = '') {
 	$prod = array();
 
 	$query = 'select pc.category_id,p.is_screen_printing,p.raw_product_id,p.image,pd.name,pd.description from ' . TBL_RAW_PRODUCT_CATEGORY . ' as pc inner join ' . TBL_RAW_PRODUCT . ' as p on p.raw_product_id=pc.raw_product_id  inner join ' . TBL_RAW_PRODUCT_DESC . ' as pd on pd.raw_product_id=pc.raw_product_id where  pc.category_id="' . $cat_id . '" AND p.status="1" AND p.is_deleted="0"  AND  pd.language_id="' . LANG_ID . '" ';
+	//return $query;
 	$rst = mysql_query($query);
 	$num = mysql_num_rows($rst);
 
@@ -185,9 +178,9 @@ function getScreenPrintingColors() {
 				$result[] = $obj;
 				unset($obj);
 			}
-		}		
+		}
 	}
-	return $result;	
+	return $result;
 }
 
 function getProductCategories($post) {
@@ -273,7 +266,7 @@ function getProductColorViews($raw_product_id, $raw_product_color_id) {
 			//$objview->title=$row->name;
 			// $objview->price=$row->price;
 			$objview -> thumbnail = RAWPRODUCT_41x41 . $row -> image;
-			$objview -> url = RAWPRODUCTORIGINAL . $row -> image;
+			$objview -> url = RAWPRODUCT_500x500 . $row -> image;
 			//$objview->designAreas=dummyarea();
 
 			$view[] = $objview;
@@ -409,7 +402,7 @@ function getProductById($post) {
 		$result -> description = $row -> description;
 		$result -> price = $row -> price;
 		$result -> colors = getProductColors($raw_product_id);
-		$result -> is_screen_printing = $row -> is_screen_printing;		
+		$result -> is_screen_printing = $row -> is_screen_printing;
 		$result -> sizes = getProductSizes($raw_product_id);
 		$result -> views = getProductViews($raw_product_id);
 	}
@@ -483,7 +476,7 @@ function getFonts($post) {
 }
 
 //-----------------------------------------+++++++++++++++++++++------------------------------------------//
-/*
+
 function generateImage($post) {
 	secure($post);
 	$data = $post['data'];
@@ -544,64 +537,65 @@ function generateImage($post) {
 	echo 'data:image/png;base64,' . base64_encode(file_get_contents(GENIMG . $image));
 	@unlink(_GENIMG_ . $image);
 
-}*/
-
-function generateImage($post) {//changed by shivang
-	secure($post);
-	
-	$data = $post['data'];
-
-	$font = '';
-	$boldtype = $data['bold'];
-	$italictype = $data['italic'];
-	$cond = '';
-	if ($boldtype == '1' && $italictype == '1')
-		$cond = 'boldI';
-	elseif ($boldtype == '1')
-		$cond = 'bold';
-	elseif ($italictype == '1')
-		$cond = 'italic';
-	else
-		$cond = 'normal';
-
-	$query = 'select font_ttf  from ' . TBL_FONT_VALUE . ' where font_id="' . $data['fontId'] . '" and font_type ="' . $cond . '"';
-	//$_SESSION['qqqq']= $query;
-	$fontArr = mysql_fetch_object(mysql_query($query));
-	$font = _FONTTTF_ . $fontArr -> font_ttf;
-
-	$querydirection = 'select directionshow  from ' . TBL_FONT . ' where font_id="' . $data['fontId'] . '" ';
-	//$_SESSION['qqqq']= $query;
-	$directionshw = mysql_fetch_object(mysql_query($querydirection));
-	$directionshow = '';
-	if ($directionshw -> directionshow == 2) {
-		$directionshow = " -direction right-to-left ";
-	}
-	
-	$image = _GENIMG_ . time() . '.png';
-	
-	$data['image'] = $image;
-	$data['font'] = $font;
-	$data['size'] = '300x';
-	//$data['style'] = 'glow';
-	//$data['effect'] = 'convex-bottom';
-	//$data['lineweight'] = '3';
-	if($italictype == '1')
-		$data['italic'] = 45;
-	//$data['distortion'] = 0.5;
-	//$data['color'] = '0xFFFFFF';
-	//$data['outlineColor'] = $data['color'];
-	$data['glowShadowColor'] = $data['outlineColor'];//$data['color'];
-	$data['waveCycle'] = 1;
-	$data['arcAngle'] = 0;
-	if($data['effect'] == 'arc-top' || $data['effect'] == 'arc-bottom')
-	{
-		$data['arcAngle'] = $data['distortion'] * 360;		
-	}	
-	$data['gradientAngle'] = 90;
-	echo we_textEffect($data);
-
 }
 
+/*
+ function generateImage($post) {//changed by shivang
+ secure($post);
+
+ $data = $post['data'];
+
+ $font = '';
+ $boldtype = $data['bold'];
+ $italictype = $data['italic'];
+ $cond = '';
+ if ($boldtype == '1' && $italictype == '1')
+ $cond = 'boldI';
+ elseif ($boldtype == '1')
+ $cond = 'bold';
+ elseif ($italictype == '1')
+ $cond = 'italic';
+ else
+ $cond = 'normal';
+
+ $query = 'select font_ttf  from ' . TBL_FONT_VALUE . ' where font_id="' . $data['fontId'] . '" and font_type ="' . $cond . '"';
+ //$_SESSION['qqqq']= $query;
+ $fontArr = mysql_fetch_object(mysql_query($query));
+ $font = _FONTTTF_ . $fontArr -> font_ttf;
+
+ $querydirection = 'select directionshow  from ' . TBL_FONT . ' where font_id="' . $data['fontId'] . '" ';
+ //$_SESSION['qqqq']= $query;
+ $directionshw = mysql_fetch_object(mysql_query($querydirection));
+ $directionshow = '';
+ if ($directionshw -> directionshow == 2) {
+ $directionshow = " -direction right-to-left ";
+ }
+
+ $image = _GENIMG_ . time() . '.png';
+
+ $data['image'] = $image;
+ $data['font'] = $font;
+ $data['size'] = '300x';
+ //$data['style'] = 'glow';
+ //$data['effect'] = 'convex-bottom';
+ //$data['lineweight'] = '3';
+ if($italictype == '1')
+ $data['italic'] = 45;
+ //$data['distortion'] = 0.5;
+ //$data['color'] = '0xFFFFFF';
+ //$data['outlineColor'] = $data['color'];
+ $data['glowShadowColor'] = $data['outlineColor'];//$data['color'];
+ $data['waveCycle'] = 1;
+ $data['arcAngle'] = 0;
+ if($data['effect'] == 'arc-top' || $data['effect'] == 'arc-bottom')
+ {
+ $data['arcAngle'] = $data['distortion'] * 360;
+ }
+ $data['gradientAngle'] = 90;
+ echo we_textEffect($data);
+
+ }
+ */
 function clipartsById($post) {
 	secure($post);
 	$subCategoryId = $post['subCategoryId'];
@@ -613,7 +607,7 @@ function clipartsById($post) {
 						LEFT JOIN " . TBL_DESIGN_DESC . " AS dd ON dd.design_id = des.id
 						WHERE des.status = '1'
 						AND des.sub_cat_id = '" . $categoryId . "'
-						AND dd.language_id = '" . LANG_ID . "'";
+						AND dd.language_id = '" . LANG_ID . "' GROUP BY dd.design_id ";
 
 	/*if($categoryId!=''){
 	 $sqlCategory = "
@@ -1170,7 +1164,7 @@ function saveProduct($post) {
 
 	$rawproductrst = mysql_query("SELECT * FROM " . TBL_RAW_PRODUCT . " WHERE raw_product_id='" . $productId . "'");
 	$rawproductnum = mysql_num_rows($rawproductrst);
-	$_SESSION['rawprodnum'] = $rawproductnum; 
+	$_SESSION['rawprodnum'] = $rawproductnum;
 	if ($rawproductnum > 0) {
 
 		$rawproduct = mysql_fetch_object($rawproductrst);
@@ -1365,11 +1359,11 @@ function saveProduct($post) {
 			$_SESSION['cart'][$key] = 1;
 		}
 		if (USERTYPE == 0) {
-			$url = 'admin/index.php?route=catalog/product/update&token=' . TOKEN . '&product_id=' . $mainProductId;
+			$url = HTTP_SERVER . 'admin/index.php?route=catalog/product/update&token=' . TOKEN . '&product_id=' . $mainProductId;
 		} else if (USERTYPE == 1) {
-			$url = 'index.php?route=checkout/cart';
+			$url = HTTP_SERVER . 'index.php?route=checkout/cart';
 		} else {
-			$url = 'index.php?route=checkout/cart';
+			$url = HTTP_SERVER . 'index.php?route=checkout/cart';
 			$_SESSION['MAINPRODUCTID'] = $mainProductId;
 		}
 

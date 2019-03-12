@@ -1,5 +1,5 @@
 <?php
-class Config {
+final class Config {
 	private $data = array();
 
   	public function get($key) {
@@ -18,11 +18,11 @@ class Config {
 		$file = DIR_CONFIG . $filename . '.php';
 		
     	if (file_exists($file)) { 
-	  		$_ = array();
+	  		$cfg = array();
 	  
 	  		require($file);
 	  
-	  		$this->data = array_merge($this->data, $_);
+	  		$this->data = array_merge($this->data, $cfg);
 		} else {
 			trigger_error('Error: Could not load config ' . $filename . '!');
 			exit();

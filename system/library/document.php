@@ -1,5 +1,5 @@
 <?php
-class Document {
+final class Document {
 	private $title;
 	private $description;
 	private $keywords;	

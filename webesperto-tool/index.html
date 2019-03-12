@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html ng-app="myApp" id="ng-app">
+	<head>
+		<!--[if lte IE 8]>
+		<script type="text/javascript" src="js/excanvas.js"></script>
+		<![endif]-->
+		<meta charset="utf-8"/>
+		<title>Design your own tshirt</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<link rel="stylesheet" href="style.css" type="text/css">
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
+		<script type="text/javascript" src="js/html5shiv-printshiv.js"></script>
+		<script src="js/jquery-1.9.2.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+		<script src="js/touch-punch.js"></script>
+		<script src="js/lla_sjcirbaf.js"></script>
+		<script src="js/nim.ralugna.js"></script>
+		<script src="js/nim.iu-ralugna.js"></script>
+		<script src="js/controller.js"></script>
+		<link href="jquery.minicolors.css" rel="stylesheet">
+		<script src="js/jquery.minicolors.js"></script>
+		<script src="js/html2canvas.js"></script>
+		<script src="js/paging.js"></script>
+		<script src="js/ed.js"></script>
+
+	</head>
+
+	<body ng-init="entryPoint()" ng-controller="FrontController">
+		<article id="container">
+			<nav id="nav">
+				<ul>
+					<li ng-class="{true: 'select', false:''}[(selectedPanel == 'productPanel')]"
+					ng-click="showPanel('productPanel')">
+						<a href="javascript:void(0);">Choose a product</a>
+					</li>
+					<li ng-class="{true: 'select', false:''}[(selectedPanel == 'clipartPanel')]"
+					ng-click="showPanel('clipartPanel')">
+						<a href="javascript:void(0);">Choose a design</a>
+					</li>
+					<li ng-class="{true: 'select', false:''}[(selectedPanel == 'textPanel')]"
+					ng-click="showPanel('textPanel')">
+						<a href="javascript:void(0);">Add text</a>
+					</li>
+					<li ng-class="{true: 'select', false:''}[(selectedPanel == 'uploadPanel')]"
+					ng-click="showPanel('uploadPanel')">
+						<a href="javascript:void(0);">Upload photo</a>
+					</li>
+					<!--<li>-->
+					<!--<div class="myfileupload-buttonbar" style="position: relative">-->
+					<!--<label class="myui-button">-->
+					<!--<span >Upload</span>-->
+					<!--<form id="avatar_form" action="{{ SERVER_PATH }}userUpload.php" method="post" enctype="multipart/form-data" target="uploader_iframe">-->
+					<!--<input id="avatar" type="file" name="images" size="30" />-->
+					<!--</form>-->
+					<!--&lt;!&ndash; Hidden iframe which will interact with the server, do not forget to give both name and id values same &ndash;&gt;
+					-->
+					<!--<iframe id="uploader_iframe" name="uploader_iframe" style="display: none;"></iframe>-->
+					<!--</label>-->
+					<!--</div>-->
+					<!--</li>-->
+				</ul>
+				<div class="pull-right" align="" id="imageeditor" style="display: none">
+					<div class="btn-group">
+						<input type="button" value="Send Backward" ng-click="sendBackward()"/>
+						<input type="button" value="Send Forward" ng-click="sendForward()"/>
+						<input type="button" value="Delete" ng-click="deleteLayer()"/>
+					</div>
+				</div>
+			</nav>
+
+			<div id="content">
+				<aside class="left-pan">
+					<!--Product Panel Starts-->
+					<div class="left" id="productPanel" style="max-height: 400px;">
+						<b>Select a product</b>
+
+						<div class="del" ng-click="hidePanel('productPanel')">
+							<a href="javascript:void(0);" title="Close">Close</a>
+						</div>
+
+						<div class="styled-select">
+							<select class="best" ng-model="selectedProductCategory"
+							ng-options="productCategory.name for productCategory in productCategories.category"
+							ng-change="onProductCategoryChange(selectedProductCategory)"></select>
+							<span class="selecttext">{{ selectedProductCategory.name }}</span>
+						</div>
+
+						<div class="clip clart">
+							<ul>
+								<li class="scale" ng-repeat="product in pagedProductData.content(pagedProductData.current)" ng-cloak
+								ng-click="getProductById(product.id,true)">
+									<a href="javascript:void(0);" ng-class="{true: 'lst', false:''}[{{isInt(($index+1)/5)}}]"
+									class="{{ {true: 'select', false:''}[(product.id == selectedProductId)]}}"> <img ng-src="{{getImageAbsolutePath(product.source)}}" width="45" height="50"
+									alt="{{product.name}}"> </a>
+								</li>
+							</ul>
+						</div>
+
+						<div class="paging" ng-show="pagedProductData.count &gt; 0">
+							<a href="#" class="prevPage" ng-click="pagedProductData.prev()">«</a>
+
+							<div>
+								<div class="outer">
+									<div class="inner">
+										<a href="#" ng-repeat="n in pagedProductData.list()"
+										ng-click="pagedProductData.current = n" style="margin: 0 2px;" ng-cloak
+										ng-style="{ boxShadow:((n==pagedProductData.current) && '0 0 2px 2px #7EBA2E' || '0 0 2px #999999')}">{{n
+										+ 1}}</a>
+									</div>
+								</div>
+							</div>
+
+							<a href="#" class="nextPage" ng-click="pagedProductData.next()">»</a>
+						</div>
+					</div>
+					<!--Product Panel End-->
+
+					<!--Text Panel Start-->
+					<div class="left" id="textPanel" style="left: -500px;display: none;padding-bottom: 0px">
+						<b>Add Text</b>
+
+						<div class="del" ng-click="hidePanel('textPanel')">
+							<a href="javascript:void(0);" title="Close">Close</a>
+						</div>
+						<input name="" ng-model="addEditTextModel" id="addTextInput" type="text"
+						placeholder="Write your text here..."/>
+
+						<div class="styled-select"
+						style="background: url('images/bx.png') repeat scroll left top -44px transparent;margin-top: -5px">
+							<select ng-model="selectedFont" ng-options="font.title for font in fonts"
+							ng-change="onFontChange(selectedFont)" style="width: 174px"></select>
+							<span class="selecttext">{{ selectedFont.title }}</span>
+						</div>
+
+						<div class="style">
+							<ul>
+								<li ng-click="BIUClick('bold')" ng-show="selectedFont.bold == 1">
+									<a href="javascript:void(0);"
+									class="bld" title="Bold"
+									ng-style="{opacity: boldSelected && 0.6 || 1}">Bold</a>
+								</li>
+								<li ng-click="BIUClick('italic')" ng-show="selectedFont.italic == 1">
+									<a href="javascript:void(0);"
+									class="itl" title="Italic"
+									ng-style="{opacity: italicSelected && 0.6 || 1}">Italic</a>
+								</li>
+								<li ng-click="BIUClick('underline')" style="display: none">
+									<a href="javascript:void(0);"
+									class="under"
+									title="Underline"
+									ng-style="{opacity: underlineSelected && 0.6 || 1}">Underline</a>
+								</li>
+							</ul>
+						</div>
+						<input name="" type="button" value="Edit" ng-click="addEditText('edit')"
+						ng-show="getActiveObject().data.type=='text'"/>
+						<input name="" type="button" value="Add" ng-click="addEditText('add')"/>
+
+					</div>
+					<!--Text Panel End-->
+					<!--Clipart Panel Starts-->
+					<div class="left" id="clipartPanel" style="left: -500px;display: none;max-height: 400px;">
+						<b>Choose a design</b>
+
+						<div class="del" ng-click="hidePanel('clipartPanel')">
+							<a href="javascript:void(0);" title="Close">Close</a>
+						</div>
+
+						<div class="styled-select">
+							<select class="best" ng-model="selectedClipartCategory"
+							ng-options="clipartCategory.label for clipartCategory in clipartCategories"
+							ng-change="onClipartCategoryChange(selectedClipartCategory)"></select>
+							<span class="selecttext">{{ selectedClipartCategory.label }}</span>
+						</div>
+
+						<div class="clip clart">
+							<ul>
+								<li ng-repeat="clipart in pagedClipartData.content(pagedClipartData.current)" ng-cloak
+								ng-click="addClipart(clipart)">
+									<a href="javascript:void(0);" ng-class="{true: 'lst', false:''}[{{isInt(($index+1)/5)}}]"> <img ng-src="{{getImageAbsolutePath(clipart.thumbnail)}}" width="45" height="50"
+									alt="{{clipart.title}}"> </a>
+								</li>
+							</ul>
+						</div>
+
+						<div class="paging" ng-show="pagedClipartData.count &gt; 0">
+							<a href="#" class="prevPage" ng-click="pagedClipartData.prev()">«</a>
+
+							<div>
+								<div class="outer">
+									<div class="inner">
+										<a href="#" ng-repeat="n in pagedClipartData.list()"
+										ng-click="pagedClipartData.current = n" style="margin: 0 2px;" ng-cloak
+										ng-style="{ boxShadow:((n==pagedClipartData.current) && '0 0 2px 2px #7EBA2E' || '0 0 2px #999999')}">{{n
+										+ 1}}</a>
+									</div>
+								</div>
+							</div>
+
+							<a href="#" class="nextPage" ng-click="pagedClipartData.next()">»</a>
+						</div>
+
+					</div>
+					<!--Clipart Panel End-->
+					<!--Upload Panel Starts-->
+					<div class="left" id="uploadPanel" style="left: -500px;display: none;max-height: 450px;">
+						<b>Upload a Photo</b>
+
+						<div class="del" ng-click="hidePanel('uploadPanel')">
+							<a href="javascript:void(0);" title="Close">Close</a>
+						</div>
+						<input name="" type="checkbox" ng-model="uploadImageCheckBox">
+
+						<p>
+							I have the right to use these images.
+						</p>
+
+						<div class="more" style="display: none">
+							<a href="#">More info</a>
+						</div>
+						<div class="upload" ng-show="uploadImageCheckBox">
+							<div class="myfileupload-buttonbar" style="position: relative">
+								<label class="myui-button"> <span>Upload Image</span>
+									<form id="avatar_form" action="{{ SERVER_PATH }}userUpload.php" method="post"
+									enctype="multipart/form-data" target="uploader_iframe">
+										<input id="avatar" type="file" name="images" size="30"/>
+									</form> <!-- Hidden iframe which will interact with the server, do not forget to give both name and id values same --> <iframe id="uploader_iframe" name="uploader_iframe" style="display: none;"></iframe> </label>
+							</div>
+						</div>
+
+						<div class="clip clart">
+							<ul>
+								<li ng-repeat="clipart in pagedUploadedData.content(pagedUploadedData.current)" ng-cloak
+								ng-click="addClipart(clipart)">
+									<a href="javascript:void(0);" ng-class="{true: 'lst', false:''}[{{isInt(($index+1)/5)}}]"> <img ng-src="{{getImageAbsolutePath(clipart.thumbnail)}}" width="45" height="50"
+									alt="{{clipart.title}}"> </a>
+								</li>
+							</ul>
+						</div>
+
+						<div class="paging" ng-show="pagedUploadedData.count &gt; 0">
+							<a href="#" class="prevPage" ng-click="pagedUploadedData.prev()">«</a>
+
+							<div>
+								<div class="outer">
+									<div class="inner">
+										<a href="#" ng-repeat="n in pagedUploadedData.list()"
+										ng-click="pagedUploadedData.current = n" style="margin: 0 2px;" ng-cloak
+										ng-style="{ boxShadow:((n==pagedUploadedData.current) && '0 0 2px 2px #7EBA2E' || '0 0 2px #999999')}">{{n
+										+ 1}}</a>
+									</div>
+								</div>
+							</div>
+
+							<a href="#" class="nextPage" ng-click="pagedUploadedData.next()">»</a>
+						</div>
+					</div>
+					<!--Upload Panel Ends-->
+
+				</aside>
+
+				<section class="right">
+					<div class="thumb">
+						<ul>
+							<li ng-repeat="productViewForColor in productViewsForColor"
+							ng-class="{true: 'select', false:''}[(productViewForColor.viewId == selectedViewId)]">
+								<a href="javascript:void(0);" ng-click="changeView(productViewForColor.viewId)"> <img ng-src="{{getImageAbsolutePath(productViewForColor.thumbnail)}}" width="44" height="44"/> </a>
+							</li>
+						</ul>
+					</div>
+
+					<div class="cl-bx">
+						<ul>
+							<li ng-repeat="productColor in product.colors.color"
+							ng-style="{'background-color':'#'+productColor.hexValue}"
+							ng-click="changeProductColor(productColor.id)"
+							ng-class="{true: 'select', false:''}[(productColor.id == selectedProductColorId)]"></li>
+						</ul>
+					</div>
+					<div class="box" id="textPropertiesPanel" style="display:none;right: -400px;height:100%">
+						<div class="cl-tool art">
+							<ul>
+								<li ng-class="{true: 'select', false:''}[(textColorPickerType == 'textColor')]"
+								ng-click="textColorBoxClick()">
+									<a href="javascript:void(0);"><span
+									ng-style="{backgroundColor:getActiveObject().data.color}"></span></a>
+								</li>
+								<li ng-class="{true: 'select', false:''}[(textColorPickerType == 'textOutlineColor')]"
+								ng-click="textOutlineColorBoxClick()">
+									<a href="javascript:void(0);"><span
+									ng-style="{backgroundColor:getActiveObject().data.outlineColor}"></span></a>
+								</li>
+								<li class="val" id="outlineWidthSlider" ng-model="textOutlineWidthValue" style="height: 74px"></li>
+								<li class="wrap">
+									<a href="javascript:void(0);">Text Wrap</a>
+								</li>
+								<li class="val" id="arcSlider" ng-model="textArcValue" style="height: 74px;"></li>
+							</ul>
+						</div>
+
+						<div class="clrbx" id="textClrbx">
+							<b>Select a color</b>
+
+							<div class="del" ng-click="hideTextColorPicker()">
+								<a title="Close" href="javascript:void(0);">Close</a>
+							</div>
+
+							<input id="textColorPicker" put class="minicolors" type="text">
+
+							<div class="st-bx">
+								<span ng-style="{backgroundColor:textColorPickerValue}">Color</span>
+								<input type="text" ng-model="textColorPickerValue" readonly>
+							</div>
+						</div>
+					</div>
+
+					<div class="box" id="clipartPropertiesPanel" style="display:none;right: -400px;height:100%">
+						<div class="cl-tool art">
+							<ul>
+								<li ng-repeat="image in getActiveObject().data.images"
+								ng-class="{true: 'select', false:''}[($index == selectedClipartIndex)]"
+								ng-click="clipartColorBoxClick($index)">
+									<a href="javascript:void(0);"><span
+									ng-style="{backgroundColor:'#'+image.color}"></span></a>
+								</li>
+							</ul>
+						</div>
+
+						<div class="clrbx" id="clipartClrbx">
+							<b>Select a color</b>
+
+							<div class="del" ng-click="hideClipartColorPicker()">
+								<a title="Close" href="javascript:void(0);">Close</a>
+							</div>
+
+							<input id="clipartColorPicker" put class="minicolors" type="text">
+
+							<div class="st-bx">
+								<span ng-style="{backgroundColor:clipartColorPickerValue}">Color</span>
+								<input type="text" ng-model="clipartColorPickerValue" readonly>
+							</div>
+						</div>
+					</div>
+
+					<div class="box" id="textPropertiesPanelSP" style="display:none;right: -400px;height:100%">
+						<div class="cl-tool art">
+							<ul>
+								<li ng-class="{true: 'select', false:''}[(textColorPickerType == 'textColor')]"
+								ng-click="textColorBoxSPClick()">
+									<a href="javascript:void(0);"><span
+									ng-style="{backgroundColor:getActiveObject().data.color}"></span></a>
+								</li>
+								<li ng-class="{true: 'select', false:''}[(textColorPickerType == 'textOutlineColor')]"
+								ng-click="textOutlineColorBoxSPClick()">
+									<a href="javascript:void(0);"><span
+									ng-style="{backgroundColor:getActiveObject().data.outlineColor}"></span></a>
+								</li>
+								<li class="val" id="outlineWidthSliderSP" ng-model="textOutlineWidthValue" style="height: 74px"></li>
+								<li class="wrap">
+									<a href="javascript:void(0);">Text Wrap</a>
+								</li>
+								<li class="val" id="arcSliderSP" ng-model="textArcValue" style="height: 74px;"></li>
+							</ul>
+						</div>
+
+						<div class="clrbx" id="textClrbxSP">
+							<b>Select a screen color</b>
+
+							<div class="del" ng-click="hideTextColorPickerSP()">
+								<a title="Close" href="javascript:void(0);">Close</a>
+							</div>
+
+							<div class="cl-bx">
+								<ul>
+									<li ng-repeat="screenPrintingColor in screenPrintingColors"
+									ng-style="{'background-color':'#'+screenPrintingColor.hexValue}"
+									ng-click="colorPickerChangeSPFunc('#'+screenPrintingColor.hexValue,'text')"></li>
+								</ul>
+							</div>
+
+							<div class="st-bx">
+								<span ng-style="{backgroundColor:textColorPickerValue}">Color</span>
+								<input type="text" ng-model="textColorPickerValue" readonly>
+							</div>
+						</div>
+					</div>
+
+					<div class="box" id="clipartPropertiesPanelSP" style="display:none;right: -400px;height:100%">
+						<div class="cl-tool art">
+							<ul>
+								<li ng-repeat="image in getActiveObject().data.images"
+								ng-class="{true: 'select', false:''}[($index == selectedClipartIndex)]"
+								ng-click="clipartColorBoxSPClick($index)">
+									<a href="javascript:void(0);"><span
+									ng-style="{backgroundColor:'#'+image.color}"></span></a>
+								</li>
+							</ul>
+						</div>
+
+						<div class="clrbx" id="clipartClrbxSP">
+							<b>Select a screen color</b>
+
+							<div class="del" ng-click="hideClipartColorPickerSP()">
+								<a title="Close" href="javascript:void(0);">Close</a>
+							</div>
+
+							<div class="cl-bx">
+								<ul>
+									<li ng-repeat="screenPrintingColor in screenPrintingColors"
+									ng-style="{'background-color':'#'+screenPrintingColor.hexValue}"
+									ng-click="colorPickerChangeSPFunc('#'+screenPrintingColor.hexValue,'clipart')"
+									ng-class="{true: 'select', false:''}[('#'+screenPrintingColor.hexValue == getActiveObject().data.outlineColor)]"></li>
+								</ul>
+							</div>
+
+							<div class="st-bx">
+								<span ng-style="{backgroundColor:clipartColorPickerValue}">Color</span>
+								<input type="text" ng-model="clipartColorPickerValue" readonly>
+							</div>
+
+						</div>
+					</div>
+
+				</section>
+
+				<div id="main">
+					<div id="designUI" style="display: inline-block; position: relative;" ng-cloak>
+						<img class="viewImage" ng-class="'view_'+productViewForColor.viewId"
+						ng-repeat="productViewForColor in productViewsForColor"
+						ng-show="selectedViewId == productViewForColor.viewId"
+						ng-src="{{getImageAbsolutePath(productViewForColor.url,true)}}" ng-cloak
+						onload="onViewImageLoaded()">
+
+						<div class="area" ng-repeat="productView in productViews" ng-show="selectedViewId == productView.id"
+						repeat-complete="viewAreaAdded()" ng-class="'view_' + productView.id" ng-cloak>
+							<div ng-repeat="designArea in productView.designAreas.designArea"
+							ng-style="{position:'absolute',left:designArea.x , top:designArea.y, 'z-index':2,overflow:'hidden'}"
+							ng-click="onDesignAreaClick(designArea.id)"
+							repeat-complete="designAreaAdded()" ng-cloak id="designArea_{{designArea.id}}">
+								<canvas width="{{designArea.width}}" height="{{designArea.height}}" id="canvas_{{designArea.id}}">
+
+								</canvas>
+
+							</div>
+
+							<!--ng-class="{true: 'selectedCanvas', false:'unSelectedCanvas'}[(getActiveObject() != '')]"-->
+							<div class="bleedcan" ng-repeat="designArea in productView.designAreas.designArea"
+							ng-style="{position:'absolute',left:designArea.x , top:designArea.y, width:designArea.width, height:designArea.height, 'z-index':1}"
+							ng-class="{true: 'selectedCanvas', false:'unSelectedCanvas'}[(designArea.id == selectedDrawAreaId)]"></div>
+						</div>
+					</div>
+
+					<div class="social">
+						<ul>
+							<li>
+								<a href="javascript:void(0);" class="twit" ng-click="addToCart('share','twitter')">Twitter</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" class="face" ng-click="addToCart('share','facebook')">facebbok</a>
+							</li>
+						</ul>
+					</div>
+					<div class="rg-bx">
+						<div class="size">
+							<ul>
+								<li ng-repeat="size in product.sizes.size"
+								ng-class="{true: 'select', false:''}[(selectedSize == size)]">
+									<a ng-click="onSizeClick(size)"
+									href="javascript:void(0);">{{size.title}}</a>
+								</li>
+							</ul>
+						</div>
+						<div class="txt">
+							<div style="display: inline-block;margin-top: -9px">
+								<p ng-cloak ng-show="price != null">
+									<b ng-show="commonFields.currencySymbolPosition == 'left'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+									{{price * commonFields.currencyMultiplier}}
+									<b ng-show="commonFields.currencySymbolPosition == 'right'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+								</p>
+
+								<p style="text-align: center; padding-top: 0px; text-decoration: underline; color: rgb(34, 34, 34); font-size: 13px;"
+								onmouseover="showPriceDetails(true)" onmouseout="showPriceDetails(false)">
+									details
+								</p>
+							</div>
+
+							<a href="javascript:void(0);" ng-click="addToCart('save','')">Add to Basket</a>
+						</div>
+						<div id="detailPricePanel">
+							<ul>
+								<li style="display: inline;font-weight: bold">
+									Base Price :
+								</li>
+								<li style="display: inline">
+									<b ng-show="commonFields.currencySymbolPosition == 'left'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+									{{detailPrice.basePrice}}
+									<b ng-show="commonFields.currencySymbolPosition == 'right'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+								</li>
+							</ul>
+							<ul>
+								<li style="display: inline;font-weight: bold">
+									Color Price :
+								</li>
+								<li style="display: inline">
+									<b ng-show="commonFields.currencySymbolPosition == 'left'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+									{{detailPrice.colorPrice}}
+									<b ng-show="commonFields.currencySymbolPosition == 'right'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+								</li>
+							</ul>
+							<ul>
+								<li style="display: inline;font-weight: bold">
+									Size Price :
+								</li>
+								<li style="display: inline">
+									<b ng-show="commonFields.currencySymbolPosition == 'left'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+									{{detailPrice.sizePrice}}
+									<b ng-show="commonFields.currencySymbolPosition == 'right'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+								</li>
+							</ul>
+							<ul>
+								<li style="display: inline;font-weight: bold">
+									View Price :
+								</li>
+								<li style="display: inline">
+									<b ng-show="commonFields.currencySymbolPosition == 'left'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+									{{detailPrice.viewPrice}}
+									<b ng-show="commonFields.currencySymbolPosition == 'right'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+								</li>
+							</ul>
+							<ul>
+								<li style="display: inline;font-weight: bold">
+									Clipart Price :
+								</li>
+								<li style="display: inline">
+									<b ng-show="commonFields.currencySymbolPosition == 'left'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+									{{detailPrice.clipartPrice}}
+									<b ng-show="commonFields.currencySymbolPosition == 'right'"
+									ng-cloak>{{commonFields.currencySymbol}}</b>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!--Tool Panel Starts-->
+				<div class="toolbox">
+					<div class="a-box">
+						<a href="javascript:void(0);" ng-click="align('h')"> <div class="a-style"></div> </a>
+						<a href="javascript:void(0);" ng-click="align('v')"> <div class="b-style"></div> </a>
+						<a href="javascript:void(0);" ng-click="align('c')"> <div class="c-style"></div> </a>
+
+					</div>
+					<div class="b-box">
+						<a href="javascript:void(0);" ng-click="changeFlipX()"> <div class="d-style" ng-style="{opacity: getActiveObjectChild().flipX && 0.2 || 0}"></div> </a>
+						<a href="javascript:void(0);" ng-click="changeFlipY()"> <div class="e-style" ng-style="{opacity: getActiveObjectChild().flipY && 0.2 || 0}"></div> </a>
+					</div>
+					<div class="c-box">
+						<a href="javascript:void(0);"> <div class="f-style" ng-mousedown="moveObject('bottom')"></div> </a>
+						<a href="javascript:void(0);"> <div class="g-style" ng-mousedown="moveObject('left')"></div> </a>
+						<a href="javascript:void(0);"> <div class="h-style" ng-mousedown="moveObject('right')"></div> </a>
+						<a href="javascript:void(0);"> <div class="i-style" ng-mousedown="moveObject('top')"></div> </a>
+
+					</div>
+					<div class="d-box">
+						<a href="javascript:void(0);" ng-click="sendForward()"> <div class="j-style"></div> </a>
+						<a href="javascript:void(0);" ng-click="sendBackward()"> <div class="k-style"></div> </a>
+						<a href="javascript:void(0);" ng-click="deleteLayer()"> <div class="l-style"></div> </a>
+
+					</div>
+					<div class="e-box" style="font-family:Arial; font-size:smaller;">
+						<input style="float: left;margin-top: 7px;width: 30px;height: 22px" id="rotator" name="value"/>
+					</div>
+
+					<div class="a-layer">
+						<div class="b-layer"><img src="images/toolimages/right-bot-top-box.png" width="130">
+						</div>
+						<div class="c-layer">
+							layer 1
+						</div>
+						<div class="c-layer">
+							layer 2
+						</div>
+						<div class="c-layer">
+							layer 3
+						</div>
+
+						<div class="b-layer"><img src="images/toolimages/right-bot-bot-box.png" width="130"/>
+						</div>
+					</div>
+				</div>
+				<!--Tool Panel Ends-->
+			</div>
+		</article>
+		<div class="ajaxLoader" id="ajaxLoader" style="display: none;">
+			<div style="margin: auto;padding: 16.5em 0px">
+				<img style="text-align: center" src="images/ajaxLoader.gif">
+			</div>
+		</div>
+	</body>
+</html>

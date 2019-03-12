@@ -1,0 +1,9 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+@font-face { 
+	src: url("assets/ttf/ARIAL.TTF"); 
+	fontFamily: Arial; 
+	embedAsCFF:true;	 
+}

@@ -20,7 +20,10 @@ class ControllerDesignerProduct extends Controller {
 			$productId = (int)$this->request->get['productId'];
 		} else {
 			$productId = 0;
-		}	
+		}
+		
+	
+		
 	
 		
 		$this->template =  $this->config->get('config_template') . '/template/designer/product.tpl';

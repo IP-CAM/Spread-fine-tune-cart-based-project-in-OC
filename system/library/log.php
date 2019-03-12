@@ -1,5 +1,5 @@
 <?php
-class Log {
+final class Log {
 	private $filename;
 	
 	public function __construct($filename) {

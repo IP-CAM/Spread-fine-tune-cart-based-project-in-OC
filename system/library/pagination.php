@@ -1,5 +1,5 @@
 <?php
-class Pagination {
+final class Pagination {
 	public $total = 0;
 	public $page = 1;
 	public $limit = 20;
@@ -22,7 +22,7 @@ class Pagination {
 			$page = $this->page;
 		}
 		
-		if (!(int)$this->limit) {
+		if (!$this->limit) {
 			$limit = 10;
 		} else {
 			$limit = $this->limit;

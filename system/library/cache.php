@@ -1,6 +1,23 @@
 <?php
-class Cache { 
+final class Cache { 
 	private $expire = 3600; 
+
+  	public function __construct() {
+		$files = glob(DIR_CACHE . 'cache.*');
+		
+		if ($files) {
+			foreach ($files as $file) {
+				$time = substr(strrchr($file, '.'), 1);
+
+      			if ($time < time()) {
+					if (file_exists($file)) {
+						unlink($file);
+						clearstatcache();
+					}
+      			}
+    		}
+		}
+  	}
 
 	public function get($key) {
 		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
@@ -8,19 +25,7 @@ class Cache {
 		if ($files) {
 			$cache = file_get_contents($files[0]);
 			
-			$data = unserialize($cache);
-			
-			foreach ($files as $file) {
-				$time = substr(strrchr($file, '.'), 1);
-
-      			if ($time < time()) {
-					if (file_exists($file)) {
-						unlink($file);
-					}
-      			}
-    		}
-			
-			return $data;			
+			return unserialize($cache);
 		}
 	}
 
@@ -43,6 +48,7 @@ class Cache {
     		foreach ($files as $file) {
       			if (file_exists($file)) {
 					unlink($file);
+					clearstatcache();
 				}
     		}
 		}

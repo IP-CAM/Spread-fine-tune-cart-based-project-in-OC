@@ -1,5 +1,5 @@
 <?php
-class Request {
+final class Request {
 	public $get = array();
 	public $post = array();
 	public $cookie = array();
@@ -30,7 +30,7 @@ class Request {
 	    		$data[$this->clean($key)] = $this->clean($value);
 	  		}
 		} else { 
-	  		$data = htmlspecialchars($data, ENT_COMPAT, 'UTF-8');
+	  		$data = htmlspecialchars($data, ENT_COMPAT);
 		}
 
 		return $data;

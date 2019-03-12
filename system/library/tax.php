@@ -10,17 +10,34 @@ final class Tax {
 		$this->db = $registry->get('db');	
 		$this->session = $registry->get('session');
 		
-		if (isset($this->session->data['shipping_country_id']) || isset($this->session->data['shipping_zone_id'])) {
-			$this->setShippingAddress($this->session->data['shipping_country_id'], $this->session->data['shipping_zone_id']);
+		// If shipping address is being used
+		if (isset($this->session->data['shipping_address_id'])) {
+			$address_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$this->session->data['shipping_address_id'] . "'");
+		
+			$this->setShippingAddress($address_query->row['country_id'], $address_query->row['zone_id']);
+		} elseif (isset($this->session->data['guest']['shipping'])) {
+			$this->setShippingAddress($this->session->data['guest']['shipping']['country_id'], $this->session->data['guest']['shipping']['zone_id']);
+		} elseif ($this->customer->isLogged() && ($this->config->get('config_tax_customer') == 'shipping')) {
+			$address_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$this->customer->getAddressId() . "'");
+		
+			$this->setShippingAddress($address_query->row['country_id'], $address_query->row['zone_id']);
 		} elseif ($this->config->get('config_tax_default') == 'shipping') {
 			$this->setShippingAddress($this->config->get('config_country_id'), $this->config->get('config_zone_id'));
 		}
 		
-		if (isset($this->session->data['payment_country_id']) || isset($this->session->data['payment_zone_id'])) {
-			$this->setPaymentAddress($this->session->data['payment_country_id'], $this->session->data['payment_zone_id']);
+		if (isset($this->session->data['payment_address_id'])) {
+			$address_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$this->session->data['payment_address_id'] . "'");
+		
+			$this->setPaymentAddress($address_query->row['country_id'], $address_query->row['zone_id']);
+		} elseif (isset($this->session->data['guest']['payment'])) {
+			$this->setPaymentAddress($this->session->data['guest']['payment']['country_id'], $this->session->data['guest']['payment']['zone_id']);
+		} elseif ($this->customer->isLogged() && ($this->config->get('config_tax_customer') == 'payment')) {
+			$address_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "address WHERE address_id = '" . (int)$this->customer->getAddressId() . "'");
+		
+			$this->setPaymentAddress($address_query->row['country_id'], $address_query->row['zone_id']);		
 		} elseif ($this->config->get('config_tax_default') == 'payment') {
 			$this->setPaymentAddress($this->config->get('config_country_id'), $this->config->get('config_zone_id'));
-		}
+		}	
 		
 		$this->setStoreAddress($this->config->get('config_country_id'), $this->config->get('config_zone_id'));	
   	}
@@ -147,7 +164,6 @@ final class Tax {
 			$tax_rate_data[$tax_rate['tax_rate_id']] = array(
 				'tax_rate_id' => $tax_rate['tax_rate_id'],
 				'name'        => $tax_rate['name'],
-				'rate'        => $tax_rate['rate'],
 				'type'        => $tax_rate['type'],
 				'amount'      => $amount
 			);

@@ -45,7 +45,7 @@
             var swfVersionStr = "11.1.0";
             // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
             var xiSwfUrlStr = "tool/playerProductInstall.swf";
-            var flashvars = {};
+            var flashvars = {'rootPath':'http://customreuniontshirts.com/'};
             var params = {};
             params.quality = "high";
             params.bgcolor = "#ffffff";
@@ -87,12 +87,14 @@
                 <param name="bgcolor" value="#ffffff" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
+                <param name="flashvars" value="rootPath=http://customreuniontshirts.com/" />
                 <!--[if !IE]>-->
                 <object type="application/x-shockwave-flash" data="tool/index.swf" width="100%" height="100%">
                     <param name="quality" value="high" />
                     <param name="bgcolor" value="#ffffff" />
                     <param name="allowScriptAccess" value="sameDomain" />
                     <param name="allowFullScreen" value="true" />
+                    <param name="flashvars" value="rootPath=http://customreuniontshirts.com/" />
                 <!--<![endif]-->
                 <!--[if gte IE 6]>-->
                     <p> 

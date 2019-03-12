@@ -1,5 +1,5 @@
 <?php
-class Image {
+final class Image {
     private $file;
     private $image;
     private $info;
@@ -36,57 +36,35 @@ class Image {
     }	
 	
     public function save($file, $quality = 90) {
-		$info = pathinfo($file);
+       $info = pathinfo($file);
        
-		$extension = strtolower($info['extension']);
-   		
-		if (is_resource($this->image)) {
-			if ($extension == 'jpeg' || $extension == 'jpg') {
-				imagejpeg($this->image, $file, $quality);
-			} elseif($extension == 'png') {
-				imagepng($this->image, $file);
-			} elseif($extension == 'gif') {
-				imagegif($this->image, $file);
-			}
-			   
-			imagedestroy($this->image);
-		}
-    }
-
-	/**
-	*	
-	*	@param width 
-	*	@param height
-	*	@param default char [default, w, h]
-	*				   default = scale with white space, 
-	*				   w = fill according to width, 
-	*				   h = fill according to height
-	*	
-	*/
-    public function resize($width = 0, $height = 0, $default = '') {
+	   $extension = strtolower($info['extension']);
+   
+        if ($extension == 'jpeg' || $extension == 'jpg') {
+            imagejpeg($this->image, $file, $quality);
+        } elseif($extension == 'png') {
+            imagepng($this->image, $file, 0);
+        } elseif($extension == 'gif') {
+            imagegif($this->image, $file);
+        }
+		   
+	    imagedestroy($this->image);
+    }	    
+	
+    public function resize($width = 0, $height = 0) {
     	if (!$this->info['width'] || !$this->info['height']) {
 			return;
 		}
 
 		$xpos = 0;
 		$ypos = 0;
-		$scale = 1;
 
-		$scale_w = $width / $this->info['width'];
-		$scale_h = $height / $this->info['height'];
-
-		if ($default == 'w') {
-			$scale = $scale_w;
-		} elseif ($default == 'h'){
-			$scale = $scale_h;
-		} else {
-			$scale = min($scale_w, $scale_h);
-		}
-
-		if ($scale == 1 && $scale_h == $scale_w && $this->info['mime'] != 'image/png') {
+		$scale = min($width / $this->info['width'], $height / $this->info['height']);
+		
+		if ($scale == 1) {
 			return;
 		}
-
+		
 		$new_width = (int)($this->info['width'] * $scale);
 		$new_height = (int)($this->info['height'] * $scale);			
     	$xpos = (int)(($width - $new_width) / 2);

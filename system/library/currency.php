@@ -1,5 +1,5 @@
 <?php
-class Currency {
+final class Currency {
   	private $code;
   	private $currencies = array();
   
@@ -37,11 +37,11 @@ class Currency {
   	public function set($currency) {
     	$this->code = $currency;
 
-    	if (!isset($this->session->data['currency']) || ($this->session->data['currency'] != $currency)) {
+    	if ((!isset($this->session->data['currency'])) || ($this->session->data['currency'] != $currency)) {
       		$this->session->data['currency'] = $currency;
     	}
 
-    	if (!isset($this->request->cookie['currency']) || ($this->request->cookie['currency'] != $currency)) {
+    	if ((!isset($this->request->cookie['currency'])) || ($this->request->cookie['currency'] != $currency)) {
 	  		setcookie('currency', $currency, time() + 60 * 60 * 24 * 30, '/', $this->request->server['HTTP_HOST']);
     	}
   	}
@@ -66,7 +66,7 @@ class Currency {
     	}
 
     	if ($value) {
-      		$value = (float)$number * $value;
+      		$value = $number * $value;
     	} else {
       		$value = $number;
     	}

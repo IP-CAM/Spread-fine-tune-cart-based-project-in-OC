@@ -144,7 +144,7 @@ class ControllerRawproductColor extends Controller {
 				'color_id' => $result['color_id'],
 				'name'        => $result['name'],
 				'code'        => $result['code'],
-				'is_default'        => ($result['is_default']==1)?'Yes':'No',
+				'is_default'    => ($result['is_default']==1)?'Yes':'No',
 				'sort_order'  => $result['sort_order'],
 				'selected'    => isset($this->request->post['selected']) && in_array($result['color_id'], $this->request->post['selected']),
 				'action'      => $action
