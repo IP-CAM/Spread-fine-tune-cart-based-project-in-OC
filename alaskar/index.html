@@ -125,12 +125,32 @@
 						</div>
 						<input name="" ng-model="addEditTextModel" id="addTextInput" type="text"
 						placeholder="Write your text here..."/>
-
+						<p>
+							Font :
+						</p>
 						<div class="styled-select"
 						style="background: url('images/bx.png') repeat scroll left top -44px transparent;margin-top: -5px">
 							<select ng-model="selectedFont" ng-options="font.title for font in fonts"
 							ng-change="onFontChange(selectedFont)" style="width: 174px"></select>
 							<span class="selecttext">{{ selectedFont.title }}</span>
+						</div>
+						<p>
+							Effect :
+						</p>
+						<div class="styled-select"
+						style="background: url('images/bx.png') repeat scroll left top -44px transparent;margin-top: -5px">
+							<select ng-model="selectedTextEffect" ng-options="effect.title for effect in textEffects"
+							ng-change="onTextEffectChange(selectedTextEffect)" style="width: 174px"></select>
+							<span class="selecttext">{{ selectedTextEffect.title }}</span>
+						</div>
+						<p>
+							Style :
+						</p>
+						<div class="styled-select"
+						style="background: url('images/bx.png') repeat scroll left top -44px transparent;margin-top: -5px">
+							<select ng-model="selectedTextStyle" ng-options="style.title for style in textStyles"
+							ng-change="onTextStyleChange(selectedTextStyle)" style="width: 174px"></select>
+							<span class="selecttext">{{ selectedTextStyle.title }}</span>
 						</div>
 
 						<div class="style">

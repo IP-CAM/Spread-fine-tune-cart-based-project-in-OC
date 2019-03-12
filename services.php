@@ -5,6 +5,10 @@ error_reporting(E_ERROR);
 if (file_exists('config.php')) {
 	require_once ('config.php');
 }
+if (file_exists('we_imscripts/we_generateEffects.php')) {
+	require_once ('we_imscripts/we_generateEffects.php');
+}
+
 // connect code start ----------------------
 
 $con = mysql_connect(DB_HOSTNAME, DB_USERNAME, DB_PASSWORD) or die("Cannot connect to MySQL" . mysql_error());
@@ -479,6 +483,7 @@ function getFonts($post) {
 }
 
 //-----------------------------------------+++++++++++++++++++++------------------------------------------//
+/*
 function generateImage($post) {
 	secure($post);
 	$data = $post['data'];
@@ -530,22 +535,70 @@ function generateImage($post) {
 	if ($outline > 0 && $outlinecolor != '') {
 		$cmdoutline = ' -strokewidth ' . $outline . ' -stroke "' . $outlinecolor . '" ';
 	}
-	//$font=DIR_WEBROOT.'2013041903235313663598331171412095.ttf';
+
 	$image = time() . '.png';
-	// echo IMAGEMAGICPATH.' -background transparent -depth 8 -font "'.$font.'" -gravity "center" -fill "'.$color.'" -size "'.$w.'"x"'.$h.'"! label:"'.$label.'" -rotate 0 -distort Arc "'.$angle.' '.$degree.'" -trim "'._GENIMG_.'/'.$image.'"';
 
-	// -direction right-to-left
-
-	/*$File = "font.txt";
-	 $Handle = fopen($File, 'w');
-	 fwrite($Handle,$label);
-	 fclose($Handle);
-	 */
 	$_SESSION['arc'] = IMAGEMAGICPATH . ' -background transparent -depth 8  ' . $cmdoutline . ' -font "' . $font . '" -encoding Unicode    -gravity "NorthWest" -fill "' . $color . '" -size "' . $w . '"x"' . $h . '"! ' . $directionshow . ' label:"' . $label . '" -rotate ' . $degree . ' -distort Arc "' . $angle . ' ' . $degree . '" -trim "' . _GENIMG_ . $image . '"';
 	exec(IMAGEMAGICPATH . ' -background transparent -depth 8  ' . $cmdoutline . ' -font "' . $font . '" -encoding Unicode    -gravity "NorthWest" -fill "' . $color . '" -size "' . $w . '"x"' . $h . '"! ' . $directionshow . '  label:"' . $label . '" -rotate ' . $degree . ' -distort Arc "' . $angle . ' ' . $degree . '" -trim "' . _GENIMG_ . $image . '"');
 
 	echo 'data:image/png;base64,' . base64_encode(file_get_contents(GENIMG . $image));
 	@unlink(_GENIMG_ . $image);
+
+}*/
+
+function generateImage($post) {//changed by shivang
+	secure($post);
+	
+	$data = $post['data'];
+
+	$font = '';
+	$boldtype = $data['bold'];
+	$italictype = $data['italic'];
+	$cond = '';
+	if ($boldtype == '1' && $italictype == '1')
+		$cond = 'boldI';
+	elseif ($boldtype == '1')
+		$cond = 'bold';
+	elseif ($italictype == '1')
+		$cond = 'italic';
+	else
+		$cond = 'normal';
+
+	$query = 'select font_ttf  from ' . TBL_FONT_VALUE . ' where font_id="' . $data['fontId'] . '" and font_type ="' . $cond . '"';
+	//$_SESSION['qqqq']= $query;
+	$fontArr = mysql_fetch_object(mysql_query($query));
+	$font = _FONTTTF_ . $fontArr -> font_ttf;
+
+	$querydirection = 'select directionshow  from ' . TBL_FONT . ' where font_id="' . $data['fontId'] . '" ';
+	//$_SESSION['qqqq']= $query;
+	$directionshw = mysql_fetch_object(mysql_query($querydirection));
+	$directionshow = '';
+	if ($directionshw -> directionshow == 2) {
+		$directionshow = " -direction right-to-left ";
+	}
+	
+	$image = _GENIMG_ . time() . '.png';
+	
+	$data['image'] = $image;
+	$data['font'] = $font;
+	$data['size'] = '300x';
+	//$data['style'] = 'glow';
+	//$data['effect'] = 'convex-bottom';
+	//$data['lineweight'] = '3';
+	if($italictype == '1')
+		$data['italic'] = 45;
+	//$data['distortion'] = 0.5;
+	//$data['color'] = '0xFFFFFF';
+	//$data['outlineColor'] = $data['color'];
+	$data['glowShadowColor'] = $data['outlineColor'];//$data['color'];
+	$data['waveCycle'] = 1;
+	$data['arcAngle'] = 0;
+	if($data['effect'] == 'arc-top' || $data['effect'] == 'arc-bottom')
+	{
+		$data['arcAngle'] = $data['distortion'] * 360;		
+	}	
+	$data['gradientAngle'] = 90;
+	echo we_textEffect($data);
 
 }
 

@@ -31,10 +31,8 @@ function fisheye($arr){
 //texteffects
 function textEffect($arr)
 {		
-	//system("we_imscripts/texteffect -t 'SOME BEVEL TEXT' -s ".$arr['s']."  -e ".$arr['e']." -d ".$arr['d']." -f webroot/font/ttf/2013081409250813765155081764172656.ttf -S ".$arr['S']." -c skyblue -b none -o black -l ".$arr['l']." -m ".$arr['m']." dest.png 2>&1");
-	system('we_imscripts/texteffect -t "SOME ARCHBOTTOM TEXT" -s outline -e concave -d .8 -f webroot/font/ttf/2013081409250813765155081764172656.ttf -S 2000x -c skyblue -b white -o black -l 1 -u lightpink dest.png');
-	system(IMGConvert . ' dest.png -trim dest.png');
-	return base64_encode('dest.png');
+system("we_imscripts/texteffect -t 'Hello Moto' -s roundbevel -f webroot/font/ttf/2013081405123813765003581851129448.ttf -S 500x -e convex-bottom -i 0 -d 0.5 -c red -o yellow -g pink -w 1 -a 0 -A 90 -m 2 -l 3 -u none -b none webroot/genimg/1399623971.png");
+	return base64_encode('webroot/genimg/1399623971.png');
 }
 
 $action = $_GET['action'];
