@@ -241,7 +241,7 @@ $('#product div img').live('click', function() {
 });
 
 function send(url) { 
-	$('textarea[name="message"]').val(CKEDITOR.instances.message.getData());
+	$('textarea[name=\'message\']').html($('textarea[name=\'message\']').val());
 	
 	$.ajax({
 		url: url,

@@ -15,7 +15,9 @@
         <?php if ($shipping_method) { ?>
         <a href="#tab-shipping"><?php echo $tab_shipping; ?></a>
         <?php } ?>
-        <a href="#tab-product"><?php echo $tab_product; ?></a><a href="#tab-history"><?php echo $tab_history; ?></a>
+        <a href="#tab-product"><?php echo $tab_product; ?></a>
+        <a href="#tab-history"><?php echo $tab_history; ?></a>
+        <a href="#tab-product-pdf"><?php echo 'Product Output'; ?></a>
         <?php if ($maxmind_id) { ?>
         <a href="#tab-fraud"><?php echo $tab_fraud; ?></a>
         <?php } ?>
@@ -26,14 +28,6 @@
             <td><?php echo $text_order_id; ?></td>
             <td>#<?php echo $order_id; ?></td>
           </tr>
-          <?php if (!empty($amazon_order_id)) { ?>
-          
-          <tr>
-            <td><?php echo $text_amazon_order_id; ?></td>
-            <td><?php echo $amazon_order_id; ?></td>
-          </tr>
-          
-          <?php } ?>
           <tr>
             <td><?php echo $text_invoice_no; ?></td>
             <td><?php if ($invoice_no) { ?>
@@ -231,30 +225,18 @@
             <td><?php echo $payment_method; ?></td>
           </tr>
         </table>
-		<?php echo $payment_action; ?>
       </div>
       <?php if ($shipping_method) { ?>
       <div id="tab-shipping" class="vtabs-content">
         <table class="form">
-          <?php if (!empty($amazon_order_id) && empty($shipping_lastname)) { ?> 
-            
-            <tr>
-              <td><?php echo $text_name; ?></td>
-              <td><?php echo $shipping_firstname; ?></td>
-            </tr>
-            
-           <?php } else { ?>
-            
-            <tr>
-              <td><?php echo $text_firstname; ?></td>
-              <td><?php echo $shipping_firstname; ?></td>
-            </tr>
-            <tr>
-              <td><?php echo $text_lastname; ?></td>
-              <td><?php echo $shipping_lastname; ?></td>
-            </tr>
-            
-           <?php } ?>
+          <tr>
+            <td><?php echo $text_firstname; ?></td>
+            <td><?php echo $shipping_firstname; ?></td>
+          </tr>
+          <tr>
+            <td><?php echo $text_lastname; ?></td>
+            <td><?php echo $shipping_lastname; ?></td>
+          </tr>
           <?php if ($shipping_company) { ?>
           <tr>
             <td><?php echo $text_company; ?></td>
@@ -379,9 +361,7 @@
         <table class="form">
           <tr>
             <td><?php echo $entry_order_status; ?></td>
-            <td>
-              <input type="hidden" name="old_order_status_id" value="<?php echo $order_status_id; ?>" id="old_order_status_id" />
-              <select name="order_status_id">
+            <td><select name="order_status_id">
                 <?php foreach ($order_statuses as $order_statuses) { ?>
                 <?php if ($order_statuses['order_status_id'] == $order_status_id) { ?>
                 <option value="<?php echo $order_statuses['order_status_id']; ?>" selected="selected"><?php echo $order_statuses['name']; ?></option>
@@ -389,8 +369,7 @@
                 <option value="<?php echo $order_statuses['order_status_id']; ?>"><?php echo $order_statuses['name']; ?></option>
                 <?php } ?>
                 <?php } ?>
-              </select>
-            </td>
+              </select></td>
           </tr>
           <tr>
             <td><?php echo $entry_notify; ?></td>
@@ -402,6 +381,38 @@
               <div style="margin-top: 10px; text-align: right;"><a id="button-history" class="button"><?php echo $button_add_history; ?></a></div></td>
           </tr>
         </table>
+      </div>
+       <div id="tab-product-pdf" class="vtabs-content">
+        <table class="list">
+          <thead>
+            <tr>
+              <td class="left"><?php echo $column_product; ?></td>
+              <td class="left"><?php echo 'image'; ?></td>
+              <td class="right"><?php echo 'Action'; ?></td>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($products_pdf as $product) { ?>
+            <tr>
+              <td class="left"><?php echo $product['name']; ?>
+               </td>
+            
+              <td class="right"><img src="<?php echo $product['image']; ?>" /></td>
+              <td class="right"><span id="PDF_<?php echo $product['order_id'].$product['product_id']?>">
+              <?php if($product['deletefileurl']!=''){?>
+              <a href="<?php echo $product['href']; ?>"><?php echo $product['generate']; ?></a> &nbsp; 
+              <a href="javascript:void(0);" data-hrefs="<?php echo  $product['deletefileurl'] ?>" onclick="deletePDF('PDF_<?php echo $product['order_id'].$product['product_id']?>','DPDF_<?php echo $product['order_id'].$product['product_id']?>')" id="DPDF_<?php echo $product['order_id'].$product['product_id']?>">Delete </a><?php }
+			  else{?>
+               <a href="javascript:void(0);"  data-hrefs="<?php echo $product['href']; ?>" onclick="generatePDF('PDF_<?php echo $product['order_id'].$product['product_id']?>','GPDF_<?php echo $product['order_id'].$product['product_id']?>')" id="GPDF_<?php echo $product['order_id'].$product['product_id']?>"><?php echo $product['generate']; ?></a> &nbsp; 
+              <?php }?></span> </td>
+              
+            </tr>
+            <?php } ?>
+           
+          </tbody>
+          
+        </table>
+      
       </div>
       <?php if ($maxmind_id) { ?>
       <div id="tab-fraud" class="vtabs-content">
@@ -713,6 +724,26 @@
   </div>
 </div>
 <script type="text/javascript"><!--
+
+function generatePDF(cid,aid){
+	$url=$("#"+aid).data('hrefs');
+	if($url!=''){
+	$('#'+cid).html('<img src="view/image/loading.gif" class="loading"/>');
+	$.get($url, function(data) {
+    $('#'+cid).html(data);
+    });
+	}
+	}
+function deletePDF(cid,aid){
+	$url=$("#"+aid).data('hrefs');
+	if($url!=''){
+	$('#'+cid).html('<img src="view/image/loading.gif" class="loading"/>');
+	$.get($url, function(data) {
+    $('#'+cid).html(data);
+    });
+	}
+	}	
+
 $('#invoice-generate').live('click', function() {
 	$.ajax({
 		url: 'index.php?route=sale/order/createinvoiceno&token=<?php echo $token; ?>&order_id=<?php echo $order_id; ?>',
@@ -938,17 +969,6 @@ $('#history .pagination a').live('click', function() {
 $('#history').load('index.php?route=sale/order/history&token=<?php echo $token; ?>&order_id=<?php echo $order_id; ?>');
 
 $('#button-history').live('click', function() {
-
-    if(typeof verifyStatusChange == 'function'){
-        if(verifyStatusChange() == false){
-            return false;
-        }else{
-            addOrderInfo();
-        }
-    }else{
-        addOrderInfo();
-    }
-
 	$.ajax({
 		url: 'index.php?route=sale/order/history&token=<?php echo $token; ?>&order_id=<?php echo $order_id; ?>',
 		type: 'post',
@@ -975,48 +995,5 @@ $('#button-history').live('click', function() {
 //--></script> 
 <script type="text/javascript"><!--
 $('.vtabs a').tabs();
-//--></script>
-<script type="text/javascript"><!--
-    function orderStatusChange(){
-        var status_id = $('select[name="order_status_id"]').val();
-
-        $('#openbayInfo').remove();
-
-        $.ajax({
-            url: 'index.php?route=extension/openbay/ajaxOrderInfo&token=<?php echo $this->request->get['token']; ?>&order_id=<?php echo $this->request->get['order_id']; ?>&status_id='+status_id,
-            type: 'post',
-            dataType: 'html',
-            beforeSend: function(){},
-            success: function(html) {
-                $('#history').after(html);
-            },
-            failure: function(){},
-            error: function(){}
-        });
-    }
-
-    function addOrderInfo(){
-        var status_id = $('select[name="order_status_id"]').val();
-        var old_status_id = $('#old_order_status_id').val();
-
-        $('#old_order_status_id').val(status_id);
-
-        $.ajax({
-            url: 'index.php?route=extension/openbay/ajaxAddOrderInfo&token=<?php echo $token; ?>&order_id=<?php echo $order_id; ?>&status_id='+status_id+'&old_status_id='+old_status_id,
-            type: 'post',
-            dataType: 'html',
-            data: $(".openbayData").serialize(),
-            beforeSend: function(){},
-            success: function() {},
-            failure: function(){},
-            error: function(){}
-        });
-    }
-
-    $(document).ready(function() {
-        orderStatusChange();
-    });
-
-    $('select[name="order_status_id"]').change(function(){orderStatusChange();});
-//--></script>
+//--></script> 
 <?php echo $footer; ?>

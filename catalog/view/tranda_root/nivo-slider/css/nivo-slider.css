@@ -1,0 +1,103 @@
+/*
+ * jQuery Nivo Slider v3.1
+ * http://nivo.dev7studios.com
+ *
+ * Copyright 2012, Dev7studios
+ * Free to use and abuse under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+ 
+/* The Nivo Slider styles */
+.nivoSlider { position:relative; width:100%; height:auto; overflow:hidden;}
+.nivoSlider img { position:absolute; top:0px; left:0px; max-width:none;}
+.nivo-main-image { display:block !important; position:relative !important; width:100% !important;}
+
+/* If an image is wrapped in a link */
+.nivoSlider a.nivo-imageLink { position:absolute; top:0px; left:0px; width:100%; height:100%; border:0; padding:0; margin:0; z-index:6; display:none;}
+
+/* The slices and boxes in the Slider */
+.nivo-slice { display:block; position:absolute; z-index:5; height:100%; top:0;}
+.nivo-box { display:block; position:absolute; z-index:5; overflow:hidden;}
+.nivo-box img { display:block;}
+
+/* Caption styles */
+.nivo-caption { display:none;}
+
+/* Direction nav styles (e.g. Next & Prev) */
+.nivo-directionNav a { position:absolute; z-index:9; cursor:pointer;}
+
+/* Control nav styles (e.g. 1,2,3...) */
+.nivo-controlNav { position:absolute;}
+
+
+/*
+Skin Name: .TRANDA
+Version: 1.0
+Author: 0808web
+Supports Thumbs: false
+Supports Caption: false
+*/
+.theme-tranda .nivo-caption { display:none;}
+.theme-tranda .nivo-controlNav.nivo-thumbs-enabled { display:none;}
+
+.theme-tranda .nivoSlider { position:relative; background:transparent url(../../stylesheet/img/loading.gif) no-repeat 50% 50%;}
+.theme-tranda .nivoSlider img { position:absolute; top:0px; left:0px; display:none;}
+.theme-tranda .nivoSlider a { border:0; display:block;}
+
+.theme-tranda .nivo-controlNav { left:20px; bottom:-27px; right:20px; z-index:9; height:15px; text-align:center;}
+.theme-tranda .nivo-controlNav a { display:inline-block; position:relative; width:15px; height:15px; margin:0 10px 0 0; text-decoration:none; text-align:center;}
+.theme-tranda .nivo-controlNav a i { float:left; width:15px; height:15px; font-size:14px;}
+
+.theme-tranda .nivo-directionNav a { display:block; width:75px; height:75px; text-align:center; opacity:0; text-decoration:none; -webkit-transition:all 200ms ease-in-out; -moz-transition:all 200ms ease-in-out; -o-transition:all 200ms ease-in-out; transition:all 200ms ease-in-out;}
+.theme-tranda .nivo-directionNav a i { display:block; font-size:84px; line-height:76px; width:75px; height:75px;}
+.theme-tranda .nivoSlider:hover .nivo-directionNav a { opacity:1;}
+
+.directionnav-left-right-center .nivo-prevNav { left:-100px; top:50%; margin-top:-34px;}
+.directionnav-left-right-center .nivo-nextNav { right:-100px; top:50%; margin-top:-34px;}
+.directionnav-left-right-center .nivoSlider:hover .nivo-directionNav .nivo-prevNav { left:20px;}
+.directionnav-left-right-center .nivoSlider:hover .nivo-directionNav .nivo-nextNav { right:20px;}
+
+.directionnav-left-right-top .nivo-prevNav { left:-100px; top:20px;}
+.directionnav-left-right-top .nivo-nextNav { right:-100px; top:20px;}
+.directionnav-left-right-top .nivoSlider:hover .nivo-directionNav .nivo-prevNav { left:20px;}
+.directionnav-left-right-top .nivoSlider:hover .nivo-directionNav .nivo-nextNav { right:20px;}
+
+.directionnav-left-right-bottom .nivo-prevNav { left:-100px; bottom:20px;}
+.directionnav-left-right-bottom .nivo-nextNav { right:-100px; bottom:20px;}
+.directionnav-left-right-bottom .nivoSlider:hover .nivo-directionNav .nivo-prevNav { left:20px;}
+.directionnav-left-right-bottom .nivoSlider:hover .nivo-directionNav .nivo-nextNav { right:20px;}
+
+.directionnav-left-right-center-center .nivo-prevNav { left:-100px; top:50%; margin-top:-34px;}
+.directionnav-left-right-center-center .nivo-nextNav { right:-100px; top:50%; margin-top:-34px;}
+.directionnav-left-right-center-center .nivoSlider:hover .nivo-directionNav .nivo-prevNav { left:50%; margin-left:-85px;}
+.directionnav-left-right-center-center .nivoSlider:hover .nivo-directionNav .nivo-nextNav { right:50%; margin-right:-85px;}
+
+.directionnav-left-right-center-bottom .nivo-prevNav { left:-100px; bottom:20px; margin-top:-34px;}
+.directionnav-left-right-center-bottom .nivo-nextNav { right:-100px; bottom:20px; margin-top:-34px;}
+.directionnav-left-right-center-bottom .nivoSlider:hover .nivo-directionNav .nivo-prevNav { left:50%; margin-left:-85px;}
+.directionnav-left-right-center-bottom .nivoSlider:hover .nivo-directionNav .nivo-nextNav { right:50%; margin-right:-85px;}
+
+.directionnav-left-right-right-bottom .nivo-prevNav { right:-200px; bottom:20px;}
+.directionnav-left-right-right-bottom .nivo-nextNav { right:-100px; bottom:20px;}
+.directionnav-left-right-right-bottom .nivoSlider:hover .nivo-directionNav .nivo-prevNav { right:115px;}
+.directionnav-left-right-right-bottom .nivoSlider:hover .nivo-directionNav .nivo-nextNav { right:20px;}
+
+.directionnav-left-right-left-bottom .nivo-prevNav { left:-100px; bottom:20px;}
+.directionnav-left-right-left-bottom .nivo-nextNav { left:-200px; bottom:20px;}
+.directionnav-left-right-left-bottom .nivoSlider:hover .nivo-directionNav .nivo-prevNav { left:20px;}
+.directionnav-left-right-left-bottom .nivoSlider:hover .nivo-directionNav .nivo-nextNav { left:115px;}
+
+.directionnav-up-down-left .nivo-prevNav { bottom:-100px; left:20px;}
+.directionnav-up-down-left .nivo-nextNav { top:-100px; left:20px;}
+.directionnav-up-down-left .nivoSlider:hover .nivo-directionNav .nivo-prevNav { bottom:50%; margin-bottom:-85px;}
+.directionnav-up-down-left .nivoSlider:hover .nivo-directionNav .nivo-nextNav { top:50%; margin-top:-85px;}
+
+.directionnav-up-down-right .nivo-prevNav { bottom:-100px; right:20px;}
+.directionnav-up-down-right .nivo-nextNav { top:-100px; right:20px;}
+.directionnav-up-down-right .nivoSlider:hover .nivo-directionNav .nivo-prevNav { bottom:50%; margin-bottom:-85px;}
+.directionnav-up-down-right .nivoSlider:hover .nivo-directionNav .nivo-nextNav { top:50%; margin-top:-85px;}
+
+
+@media screen and (max-width:1022px) {
+	.theme-tranda .nivoSlider .nivo-directionNav { display:none;}
+}

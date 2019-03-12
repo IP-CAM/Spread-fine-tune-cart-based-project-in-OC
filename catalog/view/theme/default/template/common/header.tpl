@@ -73,6 +73,8 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
 <?php if ($categories) { ?>
 <div id="menu">
   <ul>
+  <li><a href="<?php echo $design_your_own; ?>"><?php echo $text_design_your_own; ?></a></li>
+  <li><a href="<?php echo $raw_product_design; ?>"><?php echo $design_from_raw_product; ?></a></li>
     <?php foreach ($categories as $category) { ?>
     <li><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a>
       <?php if ($category['children']) { ?>
@@ -93,10 +95,5 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
     <?php } ?>
   </ul>
 </div>
-<?php } ?>
-<?php if ($error) { ?>
-    
-    <div class="warning"><?php echo $error ?><img src="catalog/view/theme/default/image/close.png" alt="" class="close" /></div>
-    
 <?php } ?>
 <div id="notification"></div>

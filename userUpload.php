@@ -2,8 +2,8 @@
 session_start();
 //error_reporting(E_ALL);
 error_reporting(0);
-if (file_exists('we_config.php')) {
-	require_once('we_config.php');
+if (file_exists('config.php')) {
+	require_once('config.php');
 }  
 // connect code start ----------------------
 

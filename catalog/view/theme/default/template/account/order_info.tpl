@@ -62,7 +62,7 @@
     <tbody>
       <?php foreach ($products as $product) { ?>
       <tr>
-        <td class="left"><?php echo $product['name']; ?>
+        <td class="left"><img src="<?php echo $product['image']?>" style="  float: left; margin-right: 5px;" /><?php echo $product['name']; ?>
           <?php foreach ($product['option'] as $option) { ?>
           <br />
           &nbsp;<small> - <?php echo $option['name']; ?>: <?php echo $option['value']; ?></small>

@@ -1,11 +1,11 @@
 <?php
 // Version
-define('VERSION', '1.5.6.4');
-
+define('VERSION', '1.5.5.1');
+error_reporting(1);
 // Configuration
 if (file_exists('config.php')) {
 	require_once('config.php');
-}
+}  
 
 // Install
 if (!defined('DIR_APPLICATION')) {
@@ -15,16 +15,22 @@ if (!defined('DIR_APPLICATION')) {
 
 //VirtualQMOD
 require_once('../vqmod/vqmod.php');
-VQMod::bootup();
+$vqmod = new VQMod();
 
 // VQMODDED Startup
-require_once(VQMod::modCheck(DIR_SYSTEM . 'startup.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'startup.php'));
 
 // Application Classes
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/currency.php'));
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/user.php'));
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/weight.php'));
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/length.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/currency.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/user.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/weight.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/length.php'));
+
+//nafees change========
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/pdfoutput.php'));
+//require_once($vqmod->modCheck(DIR_SYSTEM . 'library/phpzip.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/zipfile.php'));
+//nafees change========
 
 // Registry
 $registry = new Registry();
@@ -40,10 +46,10 @@ $registry->set('config', $config);
 // Database
 $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 $registry->set('db', $db);
-
+		
 // Settings
 $query = $db->query("SELECT * FROM " . DB_PREFIX . "setting WHERE store_id = '0'");
-
+ 
 foreach ($query->rows as $setting) {
 	if (!$setting['serialized']) {
 		$config->set($setting['key'], $setting['value']);
@@ -55,8 +61,8 @@ foreach ($query->rows as $setting) {
 // Url
 $url = new Url(HTTP_SERVER, $config->get('config_secure') ? HTTPS_SERVER : HTTP_SERVER);	
 $registry->set('url', $url);
-
-// Log
+		
+// Log 
 $log = new Log($config->get('config_error_filename'));
 $registry->set('log', $log);
 
@@ -130,10 +136,10 @@ $registry->set('language', $language);
 
 // Document
 $registry->set('document', new Document()); 		
-
+		
 // Currency
 $registry->set('currency', new Currency($registry));		
-
+		
 // Weight
 $registry->set('weight', new Weight($registry));
 
@@ -143,9 +149,13 @@ $registry->set('length', new Length($registry));
 // User
 $registry->set('user', new User($registry));
 
-//OpenBay Pro
-$registry->set('openbay', new Openbay($registry));
+//nafees change========
+//$registry->set('pdf', new Pdf()); 	
+//$registry->set('phpzip', new Phpzip()); 	
+//$registry->set('zipfile', new Zipfile($registry)); 	
 
+//nafees change========
+						
 // Front Controller
 $controller = new Front($registry);
 

@@ -1,7 +1,7 @@
 <?php
 // Version
-define('VERSION', '1.5.6.4');
-
+define('VERSION', '1.5.5.1');
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 // Configuration
 if (file_exists('config.php')) {
 	require_once('config.php');
@@ -15,19 +15,19 @@ if (!defined('DIR_APPLICATION')) {
 
 // VirtualQMOD
 require_once('./vqmod/vqmod.php');
-VQMod::bootup();
+$vqmod = new VQMod();
 
 // VQMODDED Startup
-require_once(VQMod::modCheck(DIR_SYSTEM . 'startup.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'startup.php'));
 
 // Application Classes
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/customer.php'));
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/affiliate.php'));
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/currency.php'));
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/tax.php'));
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/weight.php'));
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/length.php'));
-require_once(VQMod::modCheck(DIR_SYSTEM . 'library/cart.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/customer.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/affiliate.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/currency.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/tax.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/weight.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/length.php'));
+require_once($vqmod->modCheck(DIR_SYSTEM . 'library/cart.php'));
 
 // Registry
 $registry = new Registry();
@@ -112,20 +112,20 @@ function error_handler($errno, $errstr, $errfile, $errline) {
 
 	return true;
 }
-
+	
 // Error Handler
 set_error_handler('error_handler');
 
 // Request
 $request = new Request();
 $registry->set('request', $request);
-
+ 
 // Response
 $response = new Response();
 $response->addHeader('Content-Type: text/html; charset=utf-8');
 $response->setCompression($config->get('config_compression'));
 $registry->set('response', $response); 
-
+		
 // Cache
 $cache = new Cache();
 $registry->set('cache', $cache); 
@@ -215,20 +215,17 @@ $registry->set('length', new Length($registry));
 // Cart
 $registry->set('cart', new Cart($registry));
 
-//OpenBay Pro
-$registry->set('openbay', new Openbay($registry));
-
 // Encryption
 $registry->set('encryption', new Encryption($config->get('config_encryption')));
 		
 // Front Controller 
 $controller = new Front($registry);
 
-// Maintenance Mode
-$controller->addPreAction(new Action('common/maintenance'));
-
 // SEO URL's
 $controller->addPreAction(new Action('common/seo_url'));	
+
+// Maintenance Mode
+$controller->addPreAction(new Action('common/maintenance'));
 	
 // Router
 if (isset($request->get['route'])) {

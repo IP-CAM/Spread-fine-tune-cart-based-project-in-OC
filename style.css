@@ -1,0 +1,390 @@
+ul, li, h1, h2, h3, h4, h5, form {
+    margin: 0;
+    padding: 0;
+}
+
+ul, li {
+    list-style: none;
+}
+
+.thumbnailCol {
+    padding-left: 4px;
+    padding-right: 4px;
+    margin-bottom: 4px;
+    margin-top: 4px;
+}
+
+#settingPanel .modal-dialog {
+    max-width: 250px;
+}
+
+#settingPanel .modal-body > div.btn {
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.modal {
+    /*overflow-y: auto;*/
+}
+
+.the-legend {
+    border-style: none;
+    border-width: 0;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 0;
+    width: auto;
+
+}
+
+.the-fieldset {
+    border: 2px groove threedface #444;
+    -webkit-box-shadow: 0px 0px 0px 0px #000;
+    box-shadow: 0px 0px 0px 0px #000;
+    background-color: white;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.slider {
+    width: 100%;
+}
+
+.thumbnail {
+    text-align: center;
+}
+
+.selectedCanvas {
+    border: 2px dashed red;
+}
+
+.unSelectedCanvas {
+    border: 2px dashed gray;
+}
+
+.viewImage {
+    position: absolute;
+}
+
+.area {
+    position: absolute;
+    z-index: 1;
+}
+
+.productColor {
+    background-color: green;
+    border: medium solid #dddddd;
+    border-width: 2px;
+    border-radius: 4px 4px 4px 4px;
+    cursor: pointer;
+    float: left;
+    height: 30px;
+    margin-bottom: 4px;
+    margin-left: 0;
+    margin-right: 4px;
+    width: 30px;
+}
+
+.productColor:hover {
+    border-color: #3071a9;
+}
+
+.select {
+    border-color: #2a6496;
+    border-width: 2px;
+}
+
+.box {
+    overflow: hidden;
+    clear: both;
+    position: absolute !important;
+    top: 0px;
+}
+
+.cl-tool {
+    background: url(../images/v-line.png);
+    width: 34px;
+    overflow: hidden;
+    float: right;
+    border-radius: 3px;
+    border: 1px solid #fff;
+    padding: 5px 3px;
+}
+
+.cl-tool.art {
+}
+
+.cl-tool li {
+    width: 25px;
+    border-radius: 4px;
+    border: 1px solid #d7d4d1;
+    margin-bottom: 6px;
+}
+
+.cl-tool li.select {
+    box-shadow: 0 0 2px 2px #7EBA2E;
+}
+
+.cl-tool li a {
+    background: url(../images/arrow.png) left 4px no-repeat;
+    padding-left: 6px;
+    width: 16px;
+    display: block;
+    text-indent: -9999px;
+}
+
+.cl-tool li a  span {
+    width: 15px;
+    height: 16px;
+    margin: 4px 3px 3px 0;
+    display: block;
+    border-radius: 3px;
+}
+
+.cl-tool li a  span.for {
+    background: #000;
+}
+
+.cl-tool li a  span.back {
+    background: #ea591a;
+}
+
+.cl-tool li.val {
+    background: url("../images/mtr.png");
+    border: none;
+    border-radius: 0;
+    height: 74px;
+    margin-left: 4px;
+    margin-top: 4px;
+    margin-bottom: 0;
+    width: 18px;
+
+}
+
+.cl-tool li.val a span {
+    background: url("../images/val.png");
+    display: block;
+    height: 7px;
+    left: -6px;
+    position: relative;
+    text-indent: -9999px;
+    top: 5px;
+    width: 18px;
+}
+
+.clrbx {
+    background: none repeat scroll 0 0 #F8F8F8;
+    border: 1px solid #BDB7B3;
+    border-radius: 8px 8px 8px 8px;
+    float: right;
+    margin-right: 2%;
+    padding: 10px;
+    position: relative;
+    text-align: left;
+    top: 3px;
+    width: 193px;
+}
+
+.clrbx .del {
+    background: url("../images/g-bg.png") repeat scroll 0 0 transparent;
+    box-shadow: 1px 1px 4px #999999;
+    float: right;
+    height: 16px;
+    position: absolute;
+    right: 8px;
+    top: 12px;
+    width: 16px;
+}
+
+.clrbx .del a {
+    display: block;
+    text-indent: -9999px;
+}
+
+.clrbx b {
+    display: block;
+}
+
+.clrbx .cl-area {
+    background: url(../images/cl-bx.jpg);
+    width: 203px;
+    height: 182px;
+    margin: 10px 0 2px 0;
+}
+
+.clrbx .st-bx {
+    overflow: hidden;
+}
+
+.clrbx .st-bx span {
+    width: 19px;
+    height: 19px;
+    float: left;
+    margin: 2px 5px 0 0;
+    display: block;
+    text-indent: -9999px;
+    border-radius: 4px;
+}
+
+.clrbx .st-bx span.col {
+    background: #000;
+}
+
+.clrbx .st-bx input[type="text"] {
+    border: 1px solid #abadb3;
+    padding: 2px;
+    width: 45%;
+    text-align: center;
+}
+
+.viewHolder {
+    position: relative;
+    overflow: hidden;
+}
+
+.panel {
+    border-radius: 0px;
+    border: 2px solid #000000;
+}
+
+.panel-heading {
+    background-color: #000000;
+    border-radius: 0px;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #000000;
+    border: none;
+}
+
+.settingIcon {
+    font-size: 24px;
+    color: white;
+}
+
+.settingIcon:hover {
+    color: #00AEEE;
+}
+
+.scaledIcon {
+    color: white;
+    /*transform: scale(1.5,1.5);*/
+}
+.inner {
+    position: relative;
+    left: -50%;
+}
+
+.outer {
+    display: inline-block;
+    position: relative;
+    left: 50%;
+}
+
+.myfileupload-buttonbar {
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 110px;
+    overflow: hidden;
+}
+
+.myfileupload-buttonbar input {
+    border-color: transparent;
+    border-image: none;
+    cursor: pointer;
+    direction: ltr;
+    height: 33px;
+    left: -6px;
+    margin: 0;
+    opacity: 0;
+    position: absolute;
+    top: -8px;
+    width: 102px;
+}
+
+.myui-button {
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+    overflow: visible;
+    background-color: transparent;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.paddingLR-0 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.paddingLR-1 {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.paddingLR-2 {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.paddingLR-3 {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.paddingLR-4 {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.paddingLR-5 {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.paddingLR-6 {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.paddingLR-7 {
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+.paddingLR-8 {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.paddingLR-9 {
+    padding-left: 9px;
+    padding-right: 9px;
+}
+
+.paddingLR-10 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#toolBox
+{
+    position: relative;
+    bottom: -11px;
+    /*bottom: -100px;*/
+}
+
+#toolBox .btn
+{
+    /*width: 0px;*/
+}
+
+#toolBox .btn-group
+{
+    margin-top: 5px;
+}

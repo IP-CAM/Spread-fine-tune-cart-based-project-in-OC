@@ -1,0 +1,22 @@
+/* GENERAL THEME */
+.bg-html { margin-left:auto; margin-right:auto; width:1000px;}
+
+/* HEADER */
+#bottomh.bottomfixed { position:fixed; top:0; left:0; right:0; z-index:100;}
+#container.topmargin { padding-top:70px;}
+
+/* ALL PRODUCT PAGE - JUST 1024px */
+.column-left + .column-right + .column-center .bottom_product_panel .actions { display:block; margin-left:0; margin-bottom:10px; text-align:center;}
+.column-left + .column-right + .column-center .bottom_product_panel .info { float:left;}
+.column-left + .column-right + .column-center .bottom_product_panel .rating { -webkit-border-radius:10px 0 0 0; -moz-border-radius:10px 0 0 0; border-radius:10px 0 0 0;}
+.column-left + .column-right + .column-center .review-form-box .left-form-content .gpu_form input[type="text"],
+.column-left + .column-right + .column-center .review-form-box .left-form-content .gpu_form input[type="password"],
+.column-left + .column-right + .column-center .review-form-box .left-form-content .gpu_form textarea,
+.column-left + .column-right + .column-center .review-form-box .right-form-content .gpu_form input[type="text"],
+.column-left + .column-right + .column-center .review-form-box .right-form-content .gpu_form input[type="password"],
+.column-left + .column-right + .column-center .review-form-box .right-form-content .gpu_form textarea { width:460px; min-width:460px; max-width:460px;}
+.column-left + .column-right + .column-center .review-form-box .left-form-content select,
+.column-left + .column-right + .column-center .review-form-box .right-form-content select { width:470px; min-width:470px; max-width:470px;}
+
+/* CART PAGE */
+.column-left + .column-right + .column-center .left_cart_page { float:none; width:480px; margin-bottom:15px;}
